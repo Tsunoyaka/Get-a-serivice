@@ -3,6 +3,7 @@ from .models import Statement, ResponseStatement
 from .tasks import send_response
 from .validations import normalize_phone
 
+
 class StatementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Statement

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     'apps.account',
     'apps.statement',
+    'apps.service',
 
     'django_cleanup.apps.CleanupConfig',
 ]

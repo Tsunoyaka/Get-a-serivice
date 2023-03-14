@@ -2,6 +2,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
 
 from .models import Statement, ResponseStatement
 from .serializers import StatementSerializer, ResponseStatementSerializer
@@ -12,6 +14,7 @@ class StatementViewSet(ModelViewSet):
 
 
 class CreateResponseStatementView(APIView):
+    @swagger_auto_schema(request_body=ResponseStatementSerializer)
     def post(self, request: Response):
         serializer = ResponseStatementSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -22,6 +25,8 @@ class CreateResponseStatementView(APIView):
 
    
 class DeleteResponseStatementView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def delete(self, request: Response, pk):
         queryset = ResponseStatement.objects.filter(statement__user=request.user, id=pk)
         if queryset.exists():
