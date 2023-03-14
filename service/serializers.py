@@ -4,7 +4,7 @@ from .models import Service, Stack, StackService, UserStack
 class ServiceSerializer(ModelSerializer):
     class Meta:
         model = Service
-        exclude = ('price','type',)
+        fields = '__all__'
 
     def to_representation(self, instance):
         return super().to_representation(instance)
