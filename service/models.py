@@ -30,8 +30,15 @@ class Service(models.Model):
         ('For free', 'Бесплатно'),
     ]
 
-    type = models.CharField(choices=TYPE, max_length=255, verbose_name='Тип Цены')
-        
+    type = models.CharField(choices=TYPE, max_length=255, verbose_name='Тип Цены', blank=False)
+
+    # def type_save(self):
+    #     if self.price == 0:
+    #         self.TYPE = 'For free'
+    #         return self.TYPE
+    #     else:
+    #         return self.price
+
     def __str__(self) -> str:
         return str(self.user_id)
     

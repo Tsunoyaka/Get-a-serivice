@@ -4,7 +4,7 @@ from .models import Service, Stack, StackService, UserStack
 class ServiceSerializer(ModelSerializer):
     class Meta:
         model = Service
-        exclude = ('price',)
+        exclude = ('price','type',)
 
     def to_representation(self, instance):
         return super().to_representation(instance)
@@ -12,6 +12,7 @@ class ServiceSerializer(ModelSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
         return attrs
+    
 
 class StackSerializer(ModelSerializer):
     class Meta:
