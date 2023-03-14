@@ -23,7 +23,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'last_name', 'surname', 'email', 'password', 'password_confirm')
+        fields = ('username', 'last_name', 'email', 'password', 'password_confirm')
 
 
     def validate_email(self, email):
@@ -149,13 +149,12 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'last_name', 'surname', 'image']
+        fields = ['username', 'last_name', 'image']
 
     def update(self, instance: User, validated_data):
         if instance.email == validated_data['user'].email:
             instance.username = validated_data.get('username', instance.username) 
             instance.last_name = validated_data.get('last_name', instance.last_name)
-            instance.surname = validated_data.get('surname', instance.surname) 
             instance.image = validated_data.get('image', instance.image)
             instance.save()
         else:

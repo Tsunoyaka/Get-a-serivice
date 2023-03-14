@@ -46,7 +46,7 @@ class AccountActivationView(APIView):
         user.activation_code = ''
         user.save()
         return Response(
-            'Учетная запись активирована! Теперь Вы можете войти на Booking.com', 
+            'Учетная запись активирована! Теперь Вы можете войти на ...', 
             status=status.HTTP_200_OK
             )
 

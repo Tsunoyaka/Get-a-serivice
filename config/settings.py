@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'apps.account',
+    'apps.statement',
 
     'django_cleanup.apps.CleanupConfig',
 ]

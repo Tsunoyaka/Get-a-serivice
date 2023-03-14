@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 
 class UserManager(BaseUserManager):
-    def _create(self, username, last_name, surname, email, password, **extra_fields):
+    def _create(self, username, last_name, email, password, **extra_fields):
         if not username:
             raise ValueError('User must have first name')
         if not last_name:
@@ -15,7 +15,6 @@ class UserManager(BaseUserManager):
         user = self.model(
             username=username,
             last_name=last_name,
-            surname=surname,
             email=self.normalize_email(email),
             **extra_fields
         )
@@ -23,21 +22,19 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, username, last_name, surname, email, password, **extra_fields):
+    def create_user(self, username, last_name, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_active', False)
-        return self._create(username, last_name, surname, email, password, **extra_fields)
+        return self._create(username, last_name, email, password, **extra_fields)
 
-    def create_superuser(self, username, last_name, surname, email, password, **extra_fields):
+    def create_superuser(self, username, last_name, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_active', True)
-        return self._create(username, last_name, surname, email, password, **extra_fields)
-
+        return self._create(username, last_name, email, password, **extra_fields)
 
 class User(AbstractBaseUser):
     username = models.CharField('Fist_name', max_length=50, blank=True)
     last_name = models.CharField('Last_name', max_length=50, blank=True)
-    surname = models.CharField('Surname', max_length=50, blank=True, null=True)
     email = models.EmailField('Email', max_length=255, unique=True)
     image = models.ImageField(upload_to='user_images', blank=True, null=True)
     is_active = models.BooleanField(default=False)
@@ -47,7 +44,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'last_name', 'surname']
+    REQUIRED_FIELDS = ['username', 'last_name']
 
     def __str__(self) -> str:
         return f"{self.username} {self.last_name}"
@@ -75,4 +72,6 @@ class User(AbstractBaseUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
 
