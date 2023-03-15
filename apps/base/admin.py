@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Stack, UserStack
-# Register your models here.
+from .models import Stack
+
 admin.site.register(Stack)
-admin.site.register(UserStack)
+# admin.site.register(UserStack)

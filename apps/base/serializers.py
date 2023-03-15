@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
 from apps.statement.serializers import StatementSerializer
 from apps.service.models import Service
-from . models import Stack, UserStack
+from . models import Stack
 
 
 User = get_user_model()

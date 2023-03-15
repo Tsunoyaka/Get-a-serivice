@@ -12,4 +12,3 @@ redis
 peewee
 django-cors-headers
 django-cleanup
-redis-server
