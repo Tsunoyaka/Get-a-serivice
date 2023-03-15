@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.statement',
     'apps.service',
+    'apps.base',
 
     'django_cleanup.apps.CleanupConfig',
 ]
@@ -195,7 +196,7 @@ SIMPLE_JWT = {
 
 
 CELERY_BROKER_URL = 'redis://127.0.0.1'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
 
 
 CORS_ORIGIN_ALLOW_ALL = True
