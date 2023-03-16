@@ -156,14 +156,11 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
             stacks = validated_data.get('stacks')
         except TypeError:
             pass
-        if instance.email == validated_data['user'].email:
-            instance.username = validated_data.get('username', instance.username) 
-            instance.image = validated_data.get('image', instance.image)
-            if stacks:
-                instance.stacks.set(stacks)
-            instance.save()
-        else:
-            raise serializers.ValidationError('Вы не можете совершить это действие!')
+        instance.username = validated_data.get('username', instance.username) 
+        instance.image = validated_data.get('image', instance.image)
+        if stacks:
+            instance.stacks.set(stacks)
+        instance.save()
 
 
 class UpdateEmailSerializer(serializers.ModelSerializer):
