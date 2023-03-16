@@ -109,6 +109,7 @@ class SetNewEmailView(APIView):
             )
 
 
+
 class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
