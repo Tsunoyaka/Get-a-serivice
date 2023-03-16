@@ -157,10 +157,7 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
         fields = ['username',  'image', 'stacks']
 
     def update(self, instance: User, validated_data):
-        try: 
-            stacks = validated_data.get('stacks')
-        except TypeError:
-            pass
+        stacks = validated_data.get('stacks')
         instance.username = validated_data.get('username', instance.username) 
         instance.image = validated_data.get('image', instance.image)
         if stacks:
