@@ -23,7 +23,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password_confirm', 'stacks')
+        fields = (
+            'username', 'email', 'password', 'password_confirm', 
+            'stacks', 'image', 'position', 'place_of_work'
+        )
 
 
     def validate_email(self, email):
@@ -42,7 +45,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        stacks = validated_data.pop('stacks')
         user = User.objects.create_user(**validated_data)
+        user.stacks.set(stacks)
         user.create_activation_code()
         send_activation_code.delay(user.email, user.activation_code)
         return user

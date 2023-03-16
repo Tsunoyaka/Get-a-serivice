@@ -121,7 +121,7 @@ class DeleteAccountView(APIView):
         )
 
 
-class UserPathUpdateView(APIView):
+class UserPatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request):
