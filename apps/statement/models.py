@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 
 
 class Statement(models.Model):
@@ -25,8 +24,8 @@ class Statement(models.Model):
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=13, null=True, blank=True)
     description = models.TextField()
-    create_at = models.DateTimeField(blank=True, default=datetime.now())
-
+    create_at = models.DateTimeField(auto_now_add=True)
+    
     def __str__(self) -> str:
         return f"{self.name} {self.email}"
     

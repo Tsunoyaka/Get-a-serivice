@@ -11,3 +11,11 @@ restartdb:
 	python3 manage.py makemigrations service
 	python3 manage.py migrate
 	python3 manage.py createsuperuser
+
+daemon:
+	celery -A config multi start worker1 \
+    --pidfile="$HOME/run/celery/%n.pid" \
+    --logfile="$HOME/log/celery/%n%I.log"
+
+celery:
+	celery -A config worker -l info
