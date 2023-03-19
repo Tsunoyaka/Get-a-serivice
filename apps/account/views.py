@@ -109,6 +109,7 @@ class SetNewEmailView(APIView):
             )
 
 
+
 class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -121,17 +122,12 @@ class DeleteAccountView(APIView):
         )
 
 
-class UpdateUsernameImageAccountView(APIView):
+class UserPatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request):
-        try:
-            email = request.user.email
-            obj = User.objects.get(email=email)
-        except:
-            return Response('Пользователь с таким первичным ключем отсутствует.',
-            status=status.HTTP_404_NOT_FOUND
-            )
+        email = request.user.email
+        obj = User.objects.get(email=email)
         serializer = UpdateUsernameImageSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.update(obj, serializer.validated_data)

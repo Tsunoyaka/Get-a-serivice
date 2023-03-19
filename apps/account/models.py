@@ -5,16 +5,13 @@ from django.core.exceptions import ValidationError
 
 
 class UserManager(BaseUserManager):
-    def _create(self, username, last_name, email, password, **extra_fields):
+    def _create(self, username, email, password, **extra_fields):
         if not username:
             raise ValueError('User must have first name')
-        if not last_name:
-            raise ValueError('User must have last name')
         if not email:
             raise ValueError('User must have email')
         user = self.model(
             username=username,
-            last_name=last_name,
             email=self.normalize_email(email),
             **extra_fields
         )
@@ -22,21 +19,24 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, username, last_name, email, password, **extra_fields):
+    def create_user(self, username, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_active', False)
-        return self._create(username, last_name, email, password, **extra_fields)
+        return self._create(username, email, password, **extra_fields)
 
-    def create_superuser(self, username, last_name, email, password, **extra_fields):
+    def create_superuser(self, username, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_active', True)
-        return self._create(username, last_name, email, password, **extra_fields)
+        return self._create(username, email, password, **extra_fields)
+
 
 class User(AbstractBaseUser):
-    username = models.CharField('Fist_name', max_length=50, blank=True)
-    last_name = models.CharField('Last_name', max_length=50, blank=True)
+    username = models.CharField('Full_name', max_length=50, blank=True)
     email = models.EmailField('Email', max_length=255, unique=True)
     image = models.ImageField(upload_to='user_images', blank=True, null=True)
+    position = models.CharField(max_length=100, blank=True, null=True)
+    place_of_work = models.CharField(max_length=255, blank=True, null=True)
+    stacks = models.ManyToManyField('base.Stack', related_name='user_stack', blank=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=8, blank=True)
@@ -44,10 +44,10 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'last_name']
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self) -> str:
-        return f"{self.username} {self.last_name}"
+        return f"{self.username}"
 
     def has_module_perms(self, app_label):
         return self.is_staff
@@ -58,8 +58,6 @@ class User(AbstractBaseUser):
     def save(self,*args, **kwargs):
         if not self.username:
             raise ValidationError('Поле имени не может быть пустым!')
-        if not self.last_name:
-            raise ValidationError('Поле фамилии не может быть пустым!')
         super().save(*args, **kwargs)
 
     def create_activation_code(self):

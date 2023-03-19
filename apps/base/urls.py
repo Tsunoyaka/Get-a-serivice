@@ -1,9 +1,9 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from .views import PersonalProfileView, PublicProfileView
+from .views import PersonalProfileView, PublicProfileView, StackViewSet
 
 router = DefaultRouter()
-
+router.register('stack', StackViewSet)
 
 
 urlpatterns = [

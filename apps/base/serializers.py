@@ -56,13 +56,7 @@ class ProfileServiceSerializer(ModelSerializer):
 class StackSerializer(ModelSerializer):
     class Meta:
         model = Stack
-        exclude = ('id',)
-    
-
-# class UserStackSerializer(ModelSerializer):
-#     class Meta:
-#         model = UserStack
-#         fields = '__all__'
+        fields = '__all__'
 
 
 class ServiceSerializer(ModelSerializer):

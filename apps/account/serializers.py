@@ -23,7 +23,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'last_name', 'email', 'password', 'password_confirm')
+        fields = (
+            'username', 'email', 'password', 'password_confirm', 
+            'stacks', 'image', 'position', 'place_of_work'
+        )
 
 
     def validate_email(self, email):
@@ -42,7 +45,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        stacks = validated_data.pop('stacks')
         user = User.objects.create_user(**validated_data)
+        user.stacks.set(stacks)
         user.create_activation_code()
         send_activation_code.delay(user.email, user.activation_code)
         return user
@@ -149,16 +154,15 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'last_name', 'image']
+        fields = ['username',  'image', 'stacks']
 
     def update(self, instance: User, validated_data):
-        if instance.email == validated_data['user'].email:
-            instance.username = validated_data.get('username', instance.username) 
-            instance.last_name = validated_data.get('last_name', instance.last_name)
-            instance.image = validated_data.get('image', instance.image)
-            instance.save()
-        else:
-            raise serializers.ValidationError('Вы не можете совершить это действие!')
+        stacks = validated_data.get('stacks')
+        instance.username = validated_data.get('username', instance.username) 
+        instance.image = validated_data.get('image', instance.image)
+        if stacks:
+            instance.stacks.set(stacks)
+        instance.save()
 
 
 class UpdateEmailSerializer(serializers.ModelSerializer):

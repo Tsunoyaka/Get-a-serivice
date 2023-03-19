@@ -7,6 +7,7 @@ migrate:
 
 restartdb:
 	python3 manage.py makemigrations account
+	python3 manage.py makemigrations base
 	python3 manage.py makemigrations statement
 	python3 manage.py makemigrations service
 	python3 manage.py migrate
