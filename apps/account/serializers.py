@@ -23,10 +23,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = (
-            'username', 'email', 'password', 'password_confirm', 
-            'stacks', 'image', 'position', 'place_of_work'
-        )
+        exclude = ('last_login','id','is_active','is_staff','activation_code')
+
+
 
 
     def validate_email(self, email):

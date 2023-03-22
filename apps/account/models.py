@@ -32,11 +32,34 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username = models.CharField('Full_name', max_length=50, blank=True)
-    email = models.EmailField('Email', max_length=255, unique=True)
-    image = models.ImageField(upload_to='user_images', blank=True, null=True)
-    position = models.CharField(max_length=100, blank=True, null=True)
-    place_of_work = models.CharField(max_length=255, blank=True, null=True)
-    stacks = models.ManyToManyField('base.Stack', related_name='user_stack', blank=True)
+    email = models.EmailField('Email', max_length=255, unique=True, blank=True)
+    image = models.ImageField(upload_to='user_images', blank=True)
+    position = models.CharField(max_length=100, blank=True)
+    place_of_work = models.CharField(max_length=255, blank=True)
+    stacks = models.CharField(max_length=255, blank=True)
+    about_me = models.CharField(max_length=255, blank=True)
+    help_org = models.CharField(max_length=255, blank=True)
+    level_mentor = models.CharField(max_length=255, blank=True)
+    experience = models.CharField(max_length=255, blank=True )
+    speciality = models.CharField(max_length=255, blank=True)
+    skills = models.CharField(max_length=255, blank=True)
+
+    type_price = [
+        ('Negotiable', 'Договорно'),
+        ('For free', 'Бесплатно'),
+        ('1000 сом', '1000 RUB'),
+        ('2000 сом', '2000 RUB'),
+        ('3000 сом', '3000 RUB'),
+        ('4000 сом', '4000 RUB'),
+        ('5000 сом', '5000 RUB'),
+        ('6000 сом', '6000 RUB'),
+        ('7000 сом', '7000 RUB'),
+        ('8000 сом', '8000 RUB'),
+        ('9000 сом', '9000 RUB' ),
+        ('10000 сом','10000 RUB'),
+    ]
+
+    price = models.CharField(choices=type_price, max_length=255, blank=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=8, blank=True)
