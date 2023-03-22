@@ -1,9 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
 from apps.statement.serializers import StatementSerializer
-from apps.service.models import Service
-from . models import Stack
-
+from .models import Specialization
 
 User = get_user_model()
 
@@ -16,13 +14,13 @@ class PersonalProfileSerializer(ModelSerializer):
         exclude = ('last_login','password','id','is_active','is_staff','activation_code')
 
 
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep['services'] = ProfileServiceSerializer(
-            instance.user_service.all(), many=True
-        ).data
+    # def to_representation(self, instance):
+    #     rep = super().to_representation(instance)
+    #     rep['services'] = ProfileServiceSerializer(
+    #         instance.user_service.all(), many=True
+    #     ).data
         
-        return rep
+    #     return rep
 
 
 class PublicProfileSerializer(ModelSerializer):
@@ -32,41 +30,28 @@ class PublicProfileSerializer(ModelSerializer):
         exclude = ('last_login','password','id','is_active','is_staff','activation_code','email')
 
 
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep['services'] = ServiceSerializer(
-            instance.user_service.all(), many=True
-        ).data
-        return rep
+    # def to_representation(self, instance):
+    #     rep = super().to_representation(instance)
+    #     rep['services'] = ServiceSerializer(
+    #         instance.user_service.all(), many=True
+    #     ).data
+    #     return rep
 
 
-class ProfileServiceSerializer(ModelSerializer):
+# class ProfileServiceSerializer(ModelSerializer):
+#     class Meta:
+#         model = Service
+#         fields = '__all__'
+
+#     def to_representation(self, instance):
+#         rep = super().to_representation(instance)
+#         rep['requests'] = StatementSerializer(
+#             instance.statement_service.all(), many=True
+#         ).data
+#         return rep
+
+
+class SpecializationSerializer(ModelSerializer):
     class Meta:
-        model = Service
+        model = Specialization
         fields = '__all__'
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep['requests'] = StatementSerializer(
-            instance.statement_service.all(), many=True
-        ).data
-        return rep
-
-
-class StackSerializer(ModelSerializer):
-    class Meta:
-        model = Stack
-        fields = '__all__'
-
-
-class ServiceSerializer(ModelSerializer):
-    class Meta:
-        model = Service
-        fields = '__all__'
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep['stack'] = StackSerializer(
-            instance.stack.all(), many=True
-        ).data
-        return rep

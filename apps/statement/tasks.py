@@ -20,3 +20,12 @@ def send_response(email: str, message: str, response: bool):
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email]
             ) 
+
+@app.task    
+def send_statement(email: str, name: str):
+    send_mail(
+        subject='Вам отправили заявку!',
+        message=f'Вам пришла заявка от {name}.',
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email]
+        )

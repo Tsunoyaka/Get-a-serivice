@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.utils.crypto import get_random_string
 from django.core.exceptions import ValidationError
-
+from datetime import datetime
 
 class UserManager(BaseUserManager):
     def _create(self, username, email, password, **extra_fields):
@@ -31,12 +31,25 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    username = models.CharField('Full_name', max_length=50, blank=True)
+    username = models.CharField('Full_name', max_length=255)
     email = models.EmailField('Email', max_length=255, unique=True)
-    image = models.ImageField(upload_to='user_images', blank=True, null=True)
-    position = models.CharField(max_length=100, blank=True, null=True)
-    place_of_work = models.CharField(max_length=255, blank=True, null=True)
-    stacks = models.ManyToManyField('base.Stack', related_name='user_stack', blank=True)
+    image = models.ImageField(upload_to='user_images')
+    position = models.CharField(max_length=100)
+    place_of_work = models.CharField(max_length=255)
+    about_me = models.CharField(max_length=4096)
+    help = models.CharField(max_length=4096)
+    level_mentor = models.CharField(max_length=2048)
+    experience = models.CharField(max_length=10)
+    specialization = models.ManyToManyField(
+        to='base.Specialization', 
+        related_name='mentor_specialization',
+        blank=True
+        )
+    skills = models.CharField(max_length=512)
+    status = models.BooleanField(default=True)
+    price = models.CharField(max_length=10)
+    language = models.CharField(max_length=20)
+    registration_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=8, blank=True)

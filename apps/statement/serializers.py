@@ -1,21 +1,13 @@
 from rest_framework import serializers
 from .models import Statement, ResponseStatement
-from .tasks import send_response
-from .validations import normalize_phone
+from .tasks import send_response, send_statement
 
 
 class StatementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Statement
-        fields = ['name', 'my_level', 'email', 'phone', 'description', 'create_at']
-
-
-    def validate_phone(self, phone):
-        phone = normalize_phone(phone=phone)
-        if len(phone) != 13:
-            raise serializers.ValidationError('Неверный формат телефона')
-        return phone
-
+        fields = ['mentor_service', 'name', 'my_level', 'email', 
+                  'telegram', 'description', 'create_at']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -24,6 +16,12 @@ class StatementSerializer(serializers.ModelSerializer):
             representation['accepted'] = accepted[0].accepted
         return representation
     
+    def create(self, validated_data):
+        mentor_email = validated_data.get('mentor_service').email
+        name = validated_data.get('name')
+        send_statement.delay(email=mentor_email, name=name)
+        return super().create(validated_data)
+
 
 class ResponseStatementSerializer(serializers.ModelSerializer):
     class Meta:

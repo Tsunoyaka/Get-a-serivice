@@ -23,10 +23,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = (
-            'username', 'email', 'password', 'password_confirm', 
-            'stacks', 'image', 'position', 'place_of_work'
-        )
+        exclude = ('last_login','id','is_active','is_staff',
+                   'activation_code', 'status', 'registration_date')
 
 
     def validate_email(self, email):
@@ -45,11 +43,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        stacks = validated_data.pop('stacks')
+        specialization = validated_data.pop('specialization')
         user = User.objects.create_user(**validated_data)
-        user.stacks.set(stacks)
+        user.specialization.set(specialization)
         user.create_activation_code()
-        send_activation_code.delay(user.email, user.activation_code)
+        send_activation_code(user.email, user.activation_code)
         return user
 
 
@@ -154,14 +152,32 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username',  'image', 'stacks']
+        exclude = ('id', 'email', 'last_login', 'is_active', 'is_staff', 
+                   'activation_code', 'status', 'password', 'registration_date')
+        
+        extra_kwargs = {'username': {'required': False}, 'image': {'required': False}, 
+                        'position': {'required': False}, 'place_of_work': {'required': False}, 
+                        'about_me': {'required': False}, 'help': {'required': False}, 
+                        'level_mentor': {'required': False}, 'experience': {'required': False},
+                        'skills': {'required': False}, 'price': {'required': False}, 
+                        'language': {'required': False}}
+
 
     def update(self, instance: User, validated_data):
-        stacks = validated_data.get('stacks')
+        specialization = validated_data.get('specialization')
         instance.username = validated_data.get('username', instance.username) 
         instance.image = validated_data.get('image', instance.image)
-        if stacks:
-            instance.stacks.set(stacks)
+        instance.position = validated_data.get('position', instance.position)
+        instance.place_of_work = validated_data.get('place_of_work', instance.place_of_work)
+        instance.about_me = validated_data.get('place_of_work', instance.place_of_work)
+        instance.help = validated_data.get('help', instance.help)
+        instance.level_mentor = validated_data.get('level_mentor', instance.level_mentor)
+        instance.experience = validated_data.get('experience', instance.experience)
+        instance.skills = validated_data.get('skills', instance.skills)
+        instance.price = validated_data.get('price', instance.price)
+        instance.language = validated_data.get('language', instance.language)
+        if specialization:
+            instance.specialization.set(specialization)
         instance.save()
 
 
@@ -211,3 +227,21 @@ class UpdateEmailSerializer(serializers.ModelSerializer):
         user_email = User.objects.get(email=old_email)
         user_email.email = new_email
         user_email.save()
+
+
+class AccountDeleteSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255, required=True)
+    password = serializers.CharField(max_length=128, required=True)
+
+
+    def validate(self, attrs):
+        user = self.context.get('request').user
+        if user.email != attrs.get('email'):
+            raise serializers.ValidationError(
+                'Wrong email'
+            )        
+        if not user.check_password(attrs.get('password')):
+            raise serializers.ValidationError(
+                'Wrong password'
+            )
+        return attrs

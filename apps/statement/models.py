@@ -11,15 +11,15 @@ class Statement(models.Model):
         (SENIOR, 'Senior'),
     ]
     my_level = models.CharField(
-        max_length=2,
+        max_length=4,
         choices=LEVEL,
         default=JUNIOR,
         )
-    service = models.ForeignKey(
-        to='service.Service', 
-        on_delete=models.CASCADE, 
-        related_name='statement_service'
-    )
+    mentor_service = models.ForeignKey(
+        to='account.User',
+        on_delete=models.CASCADE,
+        related_name='mentor'
+        )
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=255)
     telegram = models.CharField(max_length=255)
