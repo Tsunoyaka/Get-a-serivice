@@ -26,8 +26,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         exclude = ('last_login','id','is_active','is_staff','activation_code')
 
 
-
-
     def validate_email(self, email):
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError(

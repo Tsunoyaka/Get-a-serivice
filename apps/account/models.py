@@ -39,6 +39,7 @@ class User(AbstractBaseUser):
     stacks = models.CharField(max_length=255, blank=True)
     about_me = models.CharField(max_length=255, blank=True)
     help_org = models.CharField(max_length=255, blank=True)
+    about_me = models.CharField(max_length=255, blank=True)
     level_mentor = models.CharField(max_length=255, blank=True)
     experience = models.CharField(max_length=255, blank=True )
     speciality = models.CharField(max_length=255, blank=True)
