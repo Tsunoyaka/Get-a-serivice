@@ -49,7 +49,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         user.stacks.set(stacks)
         user.create_activation_code()
-        send_activation_code.delay(user.email, user.activation_code)
+        send_activation_code(user.email, user.activation_code)
         return user
 
 
