@@ -22,7 +22,7 @@ class Statement(models.Model):
     )
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=255)
-    phone = models.CharField(max_length=13, null=True, blank=True)
+    telegram = models.CharField(max_length=255)
     description = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
     

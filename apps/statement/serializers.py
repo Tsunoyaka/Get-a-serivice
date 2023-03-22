@@ -49,8 +49,3 @@ class ResponseStatementSerializer(serializers.ModelSerializer):
         except KeyError:
             send_response.delay(email=email, message=' ', response=validated_data['accepted'])
         ResponseStatement.objects.create(**validated_data)
-        
-
-
-    
-    

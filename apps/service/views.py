@@ -5,7 +5,9 @@ from django.contrib.auth import get_user_model
 from .models import Service
 from .serializers import ServiceSerializer
  
+
 User = get_user_model()
+
 
 class ServiceViewSet(ModelViewSet):
     queryset = Service.objects.all()
@@ -16,7 +18,6 @@ class ServiceViewSet(ModelViewSet):
         if self.action in ['retrive', 'list', 'search']:
             return []
         return [IsAuthenticated()]
-    
 
 
 

@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+
 User = get_user_model()
+
 
 class Stack(models.Model):
     title = models.CharField(max_length=100, unique=True,verbose_name='Стек')
@@ -24,6 +26,3 @@ class Stack(models.Model):
 #     class Meta:
 #         verbose_name = "Юзер Стек"
 #         verbose_name_plural = "Юзер Стеки"
-
-
-

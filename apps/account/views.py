@@ -21,7 +21,6 @@ from .serializers import (
 User = get_user_model()
 
 
-
 class RegistrationView(APIView):
     @swagger_auto_schema(request_body=UserRegistrationSerializer)
     def post(self, request: Request):
@@ -75,7 +74,6 @@ class RestorePasswordView(APIView):
             )
 
 
-
 class NewEmailView(APIView):
     def post(self, request: Request):
         serializer = RestorePasswordSerializer(data=request.data)
@@ -109,9 +107,8 @@ class SetNewEmailView(APIView):
             )
 
 
-
 class DeleteAccountView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]    
 
     def delete(self, request: Request):
         email = request.user.email
