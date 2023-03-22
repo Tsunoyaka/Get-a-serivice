@@ -11,7 +11,7 @@ import uuid
 from django.conf import settings
 
 
-@app.task
+# @app.task
 def send_activation_code(email, activation_code):
     activation_link = f'http://127.0.0.1:8000/account/activate/{activation_code}/'
     html_message = render_to_string(
