@@ -1,4 +1,4 @@
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -34,3 +34,4 @@ class PublicProfileView(APIView):
 class SpecializationViewSet(ModelViewSet):
     queryset = Specialization.objects.all()
     serializer_class = SpecializationSerializer
+    permission_classes = [IsAdminUser]
