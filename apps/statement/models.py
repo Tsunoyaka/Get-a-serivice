@@ -15,11 +15,7 @@ class Statement(models.Model):
         choices=LEVEL,
         default=JUNIOR,
         )
-    service = models.ForeignKey(
-        to='service.Service', 
-        on_delete=models.CASCADE, 
-        related_name='statement_service'
-    )
+    service = models.CharField(max_length=255, null=True)
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=13, null=True, blank=True)
