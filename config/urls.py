@@ -25,12 +25,12 @@ from rest_framework.routers import DefaultRouter
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="SoloEng API",
+      title="MentorKG API",
       default_version='v1',
-      description="This is SoloEng API",
+      description="This is MentorKG API",
       terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="info.soloeng@gmail.com"),
-      license=openapi.License(name="SoloEng License"),
+      contact=openapi.Contact(email="None"),
+      license=openapi.License(name="MentorKG License"),
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
@@ -38,9 +38,13 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
     path('account/', include('apps.account.urls')),
     path('statement/', include('apps.statement.urls')),
-    path('base/', include('apps.base.urls'))
+    path('base/', include('apps.base.urls')),
+    path('', include('apps.django_bot.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

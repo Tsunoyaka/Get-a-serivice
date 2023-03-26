@@ -15,11 +15,11 @@ from .serializers import (
     SetRestoredPasswordSerializer,
     UpdateUsernameImageSerializer,
     UpdateEmailSerializer,
+    AccountDeleteSerializer
     )
 
 
 User = get_user_model()
-
 
 
 class RegistrationView(APIView):
@@ -75,7 +75,6 @@ class RestorePasswordView(APIView):
             )
 
 
-
 class NewEmailView(APIView):
     def post(self, request: Request):
         serializer = RestorePasswordSerializer(data=request.data)
@@ -109,22 +108,24 @@ class SetNewEmailView(APIView):
             )
 
 
-
 class DeleteAccountView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]    
 
-    def delete(self, request: Request):
+    def post(self, request: Request):
         email = request.user.email
-        User.objects.get(email=email).delete()
-        return Response(
-            'Учетная запись удалена.',
-            status=status.HTTP_204_NO_CONTENT
-        )
+        serializer = AccountDeleteSerializer(data = request.data, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            User.objects.get(email=email).delete()
+            return Response(
+                'Ваш аккаунт успешно удален!',
+                status=status.HTTP_204_NO_CONTENT
+            )
+
 
 
 class UserPatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
-
+    @swagger_auto_schema(request_body=UpdateUsernameImageSerializer)
     def patch(self, request):
         email = request.user.email
         obj = User.objects.get(email=email)

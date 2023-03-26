@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.utils.crypto import get_random_string
 from django.core.exceptions import ValidationError
-
+from datetime import datetime
 
 class UserManager(BaseUserManager):
     def _create(self, username, email, password, **extra_fields):
@@ -31,35 +31,27 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    username = models.CharField('Full_name', max_length=50, blank=True)
-    email = models.EmailField('Email', max_length=255, unique=True, blank=True)
-    image = models.ImageField(upload_to='user_images', blank=True)
-    position = models.CharField(max_length=100, blank=True)
-    place_of_work = models.CharField(max_length=255, blank=True)
-    stacks = models.ManyToManyField('base.Stack', related_name='user_stack', blank=True)
-    about_me = models.CharField(max_length=255, blank=True)
-    help = models.CharField(max_length=255, blank=True)
-    level_mentor = models.CharField(max_length=255, blank=True)
-    experience = models.CharField(max_length=255, blank=True )
-    speciality = models.CharField(max_length=255, blank=True)
-    skills = models.CharField(max_length=255, blank=True)
-
-    type_price = [
-        ('Negotiable', 'Договорно'),
-        ('For free', 'Бесплатно'),
-        ('1000 сом', '1000 RUB'),
-        ('2000 сом', '2000 RUB'),
-        ('3000 сом', '3000 RUB'),
-        ('4000 сом', '4000 RUB'),
-        ('5000 сом', '5000 RUB'),
-        ('6000 сом', '6000 RUB'),
-        ('7000 сом', '7000 RUB'),
-        ('8000 сом', '8000 RUB'),
-        ('9000 сом', '9000 RUB' ),
-        ('10000 сом','10000 RUB'),
-    ]
-
-    price = models.CharField(choices=type_price, max_length=255, blank=True)
+    username = models.CharField('Full_name', max_length=255)
+    email = models.EmailField('Email', max_length=255, unique=True)
+    image = models.ImageField(upload_to='user_images')
+    telegram = models.CharField(max_length=255, blank=True, null=True)
+    telegram_status = models.BooleanField(default=False)
+    position = models.CharField(max_length=100)
+    place_of_work = models.CharField(max_length=255)
+    about_me = models.CharField(max_length=4096)
+    help = models.CharField(max_length=4096)
+    level_mentor = models.CharField(max_length=2048)
+    experience = models.CharField(max_length=10)
+    specialization = models.ManyToManyField(
+        to='base.Specialization', 
+        related_name='mentor_specialization',
+        blank=True
+        )
+    skills = models.CharField(max_length=512)
+    status = models.BooleanField(default=True)
+    price = models.CharField(max_length=10)
+    language = models.CharField(max_length=20)
+    registration_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=8, blank=True)
@@ -93,6 +85,3 @@ class User(AbstractBaseUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-
-
-

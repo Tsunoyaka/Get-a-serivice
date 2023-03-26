@@ -1,56 +1,60 @@
 from rest_framework import serializers
-from .models import Statement, ResponseStatement
-from .tasks import send_response
-from .validations import normalize_phone
+from .models import Statement
+from .tasks import send_response, send_respons_mentor
+from apps.django_bot.views import mentor_response
 
 
 class StatementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Statement
-        fields = ['name', 'my_level', 'email', 'phone', 'description', 'create_at']
+        exclude = ('accepted_code', 'denied_code')
 
 
-    def validate_phone(self, phone):
-        phone = normalize_phone(phone=phone)
-        if len(phone) != 13:
-            raise serializers.ValidationError('Неверный формат телефона')
-        return phone
+class MentiStatementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Statement
+        fields = ('my_level', 'mentor_service', 'name', 'email', 'telegram', 'description')
 
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        accepted = instance.res_statement.all()
-        if accepted.count() > 0:
-            representation['accepted'] = accepted[0].accepted
-        return representation
+    def create(self, validated_data):
+        statement = Statement.objects.create(**validated_data)
+        statement.create_response_code()
+        send_respons_mentor(instance=statement)
+        if statement.mentor_service.telegram_status is True:
+            mentor_response(instance=statement)
+        return statement
     
 
-class ResponseStatementSerializer(serializers.ModelSerializer):
+class UpdateStatementSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ResponseStatement
-        fields = ['statement', 'accepted', 'denied', 'message']
-
+        model = Statement
+        fields = ('accepted', 'denied')
 
     def validate(self, attrs):
-        response = ResponseStatement.objects.filter(statement=attrs.get('statement')).exists()
-        if response is True:
-            raise serializers.ValidationError('Response already exist')
         accepted = attrs.get('accepted')
         denied = attrs.get('denied')
-        if accepted is denied:
-            raise serializers.ValidationError('Select field')
+        if not attrs:
+            raise serializers.ValidationError(
+                'Please fill in the field'
+            )
+        elif accepted and denied is True:
+            raise serializers.ValidationError(
+                'Please select only one field'
+                )
+        elif accepted is False and denied is False:
+            raise serializers.ValidationError(
+                'Please select only one field'
+                )
+        if accepted is True:
+            attrs['denied'] = False
+        elif denied is True:
+            attrs['accepted'] = False
         return attrs
     
-    
-    def email(self, validated_data):
-        try:
-            email = validated_data['statement'].email
-            send_response.delay(email=email, message=validated_data['message'], response=validated_data['accepted'])
-        except KeyError:
-            send_response.delay(email=email, message=' ', response=validated_data['accepted'])
-        ResponseStatement.objects.create(**validated_data)
-        
-
-
-    
-    
+    def update(self, instance: Statement, validated_data):
+        send_response(email=instance.email, 
+                      mentor=instance.mentor_service.username, 
+                      response=validated_data.get('accepted'))
+        instance.accepted = validated_data.get('accepted', instance.accepted)
+        instance.denied = validated_data.get('denied', instance.denied)
+        instance.save()
+        return instance

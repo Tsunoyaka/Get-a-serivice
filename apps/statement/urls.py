@@ -1,13 +1,16 @@
 from django.urls import path
-from .views import StatementViewSet, CreateResponseStatementView, DeleteResponseStatementView
-from rest_framework.routers import DefaultRouter
+from .views import ( 
+    MentiStatementView,
+    StatementAcceptedView,
+    StatementDeniedView,
+    UpdateDeleteStatementView,
+    # BotView
+    )
 
-router = DefaultRouter()
-router.register('crud', StatementViewSet)
 
 urlpatterns = [
-    path('create-response/', CreateResponseStatementView.as_view()),
-    path('delete-response/<int:pk>', DeleteResponseStatementView.as_view())
+    path('menti-statement/', MentiStatementView.as_view()),
+    path('accepted-email/<str:accepted_code>/', StatementAcceptedView.as_view()),
+    path('denied-email/<str:denied_code>/', StatementDeniedView.as_view()),
+    path('update-delete/<int:id>/', UpdateDeleteStatementView.as_view()),
 ]
-
-urlpatterns += router.urls

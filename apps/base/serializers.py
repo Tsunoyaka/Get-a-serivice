@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
 from apps.statement.serializers import StatementSerializer
-from . models import Stack
-
+from .models import Specialization
 
 User = get_user_model()
 
@@ -52,9 +51,7 @@ class PublicProfileSerializer(ModelSerializer):
 #         return rep
 
 
-class StackSerializer(ModelSerializer):
+class SpecializationSerializer(ModelSerializer):
     class Meta:
-        model = Stack
+        model = Specialization
         fields = '__all__'
-
-

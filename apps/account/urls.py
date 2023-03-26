@@ -28,7 +28,7 @@ urlpatterns = [
     path('restore-password/',  RestorePasswordView.as_view(), name='restored_password'),
     path('set-restored-password/', SetRestoredPasswordView.as_view(), name='set_restored_password'),
     path('delete-account/', DeleteAccountView.as_view(), name='delete-account'),
-    path('update-username-image-stacks/', UserPatchUpdateView.as_view()),
+    path('update-user/', UserPatchUpdateView.as_view()),
     path('update-email/', NewEmailView.as_view()),
     path('set-new-email/', SetNewEmailView.as_view()),
 ]
