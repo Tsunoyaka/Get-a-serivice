@@ -7,9 +7,9 @@ from .tasks import send_response
 from .models import Statement
 from .serializers import (
     MentiStatementSerializer,
-    UpdateStatementSerializer
+    UpdateStatementSerializer,
+    StatementSerializer
     )
-
 
 
 class MentiStatementView(APIView):
@@ -112,3 +112,12 @@ class StatementDeniedView(APIView):
             'Вы ошиблись ссылкой', 
             status=status.HTTP_404_NOT_FOUND
             )
+    
+
+class GetStatementViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        queryset = Statement.objects.filter(mentor_service=request.user)
+        serializer = StatementSerializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
