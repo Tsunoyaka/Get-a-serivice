@@ -176,7 +176,7 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
         instance.skills = validated_data.get('skills', instance.skills)
         instance.price = validated_data.get('price', instance.price)
         instance.language = validated_data.get('language', instance.language)
-        instance.telegram = validated_data.get('telegram', instance.telegran)
+        instance.telegram = validated_data.get('telegram', instance.telegram)
         instance.telegram_status = validated_data.get('telegram_status', instance.telegram_status)
         if specialization:
             instance.specialization.set(specialization)
