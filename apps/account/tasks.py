@@ -1,17 +1,9 @@
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
-from config.celery import app
-from celery import shared_task
-from django.contrib.auth import get_user_model
-from random import randint
-
-import requests as r
-import uuid
 from django.conf import settings
 
 
-# @app.task
 def send_activation_code(email, activation_code):
     activation_link = f'http://127.0.0.1:8000/account/activate/{activation_code}/'
     html_message = render_to_string(

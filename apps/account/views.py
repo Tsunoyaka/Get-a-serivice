@@ -111,7 +111,7 @@ class SetNewEmailView(APIView):
 class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]    
 
-    def delete(self, request: Request):
+    def post(self, request: Request):
         email = request.user.email
         serializer = AccountDeleteSerializer(data = request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):

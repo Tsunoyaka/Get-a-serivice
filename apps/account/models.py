@@ -34,6 +34,8 @@ class User(AbstractBaseUser):
     username = models.CharField('Full_name', max_length=255)
     email = models.EmailField('Email', max_length=255, unique=True)
     image = models.ImageField(upload_to='user_images')
+    telegram = models.CharField(max_length=255, blank=True, null=True)
+    telegram_status = models.BooleanField(default=False)
     position = models.CharField(max_length=100)
     place_of_work = models.CharField(max_length=255)
     about_me = models.CharField(max_length=4096)
@@ -83,6 +85,3 @@ class User(AbstractBaseUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-
-
-

@@ -46,10 +46,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_filters',
     'corsheaders',
-
+    
     'apps.account',
     'apps.statement',
     'apps.base',
+    'apps.django_bot',
 
     'django_cleanup.apps.CleanupConfig',
 ]
@@ -149,6 +150,9 @@ EMAIL_PORT = config('EMAIL_PORT', default=587)
 EMAIL_HOST = config('EMAIL_HOST') # какой хост используется для отправки писем
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD') # пароль от почты
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool) # вид соединения для отправки писем
+
+
+TELEBOT_TOKEN = config('TELEBOT_TOKEN')
 
 
 AUTH_USER_MODEL = 'account.User'
