@@ -14,44 +14,21 @@ class PersonalProfileSerializer(ModelSerializer):
         exclude = ('last_login','password','id','is_active','is_staff','activation_code')
 
 
-    # def to_representation(self, instance):
-    #     rep = super().to_representation(instance)
-    #     rep['services'] = ProfileServiceSerializer(
-    #         instance.user_service.all(), many=True
-    #     ).data
-        
-    #     return rep
-
-
 class PublicProfileSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('last_login','password','id','is_active','is_staff','activation_code','email')
-
-
-    # def to_representation(self, instance):
-    #     rep = super().to_representation(instance)
-    #     rep['services'] = ServiceSerializer(
-    #         instance.user_service.all(), many=True
-    #     ).data
-    #     return rep
-
-
-# class ProfileServiceSerializer(ModelSerializer):
-#     class Meta:
-#         model = Service
-#         fields = '__all__'
-
-#     def to_representation(self, instance):
-#         rep = super().to_representation(instance)
-#         rep['requests'] = StatementSerializer(
-#             instance.statement_service.all(), many=True
-#         ).data
-#         return rep
+        exclude = ('last_login','password','id','is_active','is_staff','activation_code','email','telegram','telegram_status','registration_date')
 
 
 class SpecializationSerializer(ModelSerializer):
     class Meta:
         model = Specialization
         fields = '__all__'
+
+
+class MentorSerializer(ModelSerializer):
+
+    class Meta:
+        model = User
+        exclude = ('last_login','password','id','is_active','is_staff','activation_code','email','telegram','telegram_status','registration_date')
