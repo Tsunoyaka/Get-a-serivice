@@ -12,3 +12,4 @@ redis
 peewee
 django-cors-headers
 django-cleanup
+pyTelegramBotAPI
