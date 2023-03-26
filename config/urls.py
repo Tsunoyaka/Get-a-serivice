@@ -25,12 +25,12 @@ from rest_framework.routers import DefaultRouter
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="SoloEng API",
+      title="MentorKG API",
       default_version='v1',
-      description="This is SoloEng API",
+      description="This is MentorKG API",
       terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="info.soloeng@gmail.com"),
-      license=openapi.License(name="SoloEng License"),
+      contact=openapi.Contact(email="None"),
+      license=openapi.License(name="MentorKG License"),
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
