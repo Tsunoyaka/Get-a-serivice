@@ -21,6 +21,7 @@ User = get_user_model()
 
 
 class RegistrationView(APIView):
+    
     @swagger_auto_schema(request_body=UserRegistrationSerializer)
     def post(self, request: Request):
         serializer = UserRegistrationSerializer(data=request.data)
@@ -52,6 +53,7 @@ class AccountActivationView(APIView):
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(request_body=PasswordChangeSerializer)
     def post(self, request: Request):
         serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
@@ -63,6 +65,8 @@ class ChangePasswordView(APIView):
 
 
 class RestorePasswordView(APIView):
+    
+    @swagger_auto_schema(request_body=RestorePasswordSerializer)
     def post(self, request: Request):
         serializer = RestorePasswordSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -74,6 +78,8 @@ class RestorePasswordView(APIView):
 
 
 class SetRestoredPasswordView(APIView):
+
+    @swagger_auto_schema(request_body=SetRestoredPasswordSerializer)
     def post(self, request: Request):
         serializer = SetRestoredPasswordSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -87,6 +93,7 @@ class SetRestoredPasswordView(APIView):
 class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]    
 
+    @swagger_auto_schema(request_body=AccountDeleteSerializer)
     def post(self, request: Request):
         email = request.user.email
         serializer = AccountDeleteSerializer(data = request.data, context={'request': request})
@@ -100,6 +107,7 @@ class DeleteAccountView(APIView):
 
 class UserPatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
+
     @swagger_auto_schema(request_body=UpdateUsernameImageSerializer)
     def patch(self, request):
         email = request.user.email
@@ -115,6 +123,7 @@ class UserPatchUpdateView(APIView):
 class NewEmailView(APIView):
     permission_classes = [IsAuthenticated]    
 
+    @swagger_auto_schema(request_body=UpdateEmailSerializer)
     def post(self, request: Request):
         email = request.user.email
         serializer = UpdateEmailSerializer(data = request.data, context={'request': request})
