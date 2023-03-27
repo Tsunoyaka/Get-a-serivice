@@ -26,93 +26,96 @@ class MentiStatementView(APIView):
 class UpdateDeleteStatementView(APIView):
     permission_classes = [IsAuthenticated]
 
-
     @swagger_auto_schema(request_body=UpdateStatementSerializer)
     def patch(self, request, id):
-        if Statement.objects.filter(id=id).exists():
-            statement = Statement.objects.get(id=id)
-            if request.user == statement.mentor_service:
-                serializer = UpdateStatementSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=True):
-                    serializer.update(
-                        instance=statement, 
-                        validated_data=serializer.validated_data
-                        )
-                    return Response(
-                        data=serializer.data, 
-                        status=status.HTTP_200_OK
-                        )
+        statement = Statement.objects.filter(id=id).first()
+        if not statement:
             return Response(
-                'Отказано в доступе!',
-                status=status.HTTP_423_LOCKED
+                'Заявления под таким id не существует!', 
+                status=status.HTTP_404_NOT_FOUND
                 )
+        if request.user == statement.mentor_service:
+            serializer = UpdateStatementSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.update(
+                    instance=statement, 
+                    validated_data=serializer.validated_data
+                    )
+                return Response(
+                    data=serializer.data, 
+                    status=status.HTTP_200_OK
+                    )
         return Response(
-            'Заявления под таким id не существует!', 
-            status=status.HTTP_404_NOT_FOUND
+            'Отказано в доступе!',
+            status=status.HTTP_423_LOCKED
             )
 
 
     def delete(self, request, id):
-        if Statement.objects.filter(id=id).exists():
-            statement = Statement.objects.get(id=id)
-            if request.user == statement.mentor_service:
-                statement.delete()
-                return Response(
-                    'Заявка удалена!', 
-                    status=status.HTTP_204_NO_CONTENT
-                    )
+        statement = Statement.objects.filter(id=id).first()
+        if not statement:
             return Response(
-                'Отказано в доступе!',
-                status=status.HTTP_423_LOCKED
+                'Заявления под таким id не существует!', 
+                status=status.HTTP_404_NOT_FOUND
+                )
+        if request.user == statement.mentor_service:
+            statement.delete()
+            return Response(
+                'Заявка удалена!', 
+                status=status.HTTP_204_NO_CONTENT
                 )
         return Response(
-            'Заявления под таким id не существует!', 
-            status=status.HTTP_404_NOT_FOUND
+            'Отказано в доступе!',
+            status=status.HTTP_423_LOCKED
             )
 
 
 class StatementAcceptedView(APIView):
     def get(self, request, accepted_code):
-        if Statement.objects.filter(accepted_code=accepted_code).exists():
-            statement = Statement.objects.get(accepted_code=accepted_code)
-            statement.accepted = True
-            statement.denied = False
-            statement.save()
-            send_response(
-                email=statement.mentor_service.email, 
-                mentor=statement.mentor_service.username, 
-                response=True
-                )
+        statement = Statement.objects.filter(accepted_code=accepted_code).first()
+        if not statement:
             return Response(
-                'Вы одобрили заявку менти!',
-                status=status.HTTP_200_OK)
-        return Response(
-            'Вы ошиблись ссылкой', 
-            status=status.HTTP_404_NOT_FOUND
+                'Что бы изменить свой ответ перейдите на наш сайт!', 
+                status=status.HTTP_404_NOT_FOUND
+                )
+        statement.accepted = True
+        statement.denied = False
+        statement.accepted_code = ''
+        statement.denied_code = ''
+        statement.save()
+        send_response(
+            email=statement.mentor_service.email, 
+            mentor=statement.mentor_service.username, 
+            response=True
             )
+        return Response(
+            'Вы одобрили заявку менти!',
+            status=status.HTTP_200_OK)
 
 
 class StatementDeniedView(APIView):
     def get(self, request, denied_code):
-        if Statement.objects.filter(denied_code=denied_code).exists():
-            statement = Statement.objects.get(denied_code=denied_code)
-            statement.denied = True
-            statement.accepted = False
-            statement.save()
-            send_response(
-                email=statement.mentor_service.email, 
-                mentor=statement.mentor_service.username, 
-                response=False
-                )
+        statement =  Statement.objects.filter(denied_code=denied_code).first()
+        if not statement:
             return Response(
-                'Вы отклонили заявку менти!',
-                status=status.HTTP_200_OK
+                'Что бы изменить свой ответ перейдите на наш сайт!', 
+                status=status.HTTP_404_NOT_FOUND
                 )
-        return Response(
-            'Вы ошиблись ссылкой', 
-            status=status.HTTP_404_NOT_FOUND
+        statement.denied = True
+        statement.accepted = False
+        statement.accepted_code = ''
+        statement.denied_code = ''
+        statement.save()
+        send_response(
+            email=statement.mentor_service.email, 
+            mentor=statement.mentor_service.username, 
+            response=False
             )
-    
+        return Response(
+            'Вы отклонили заявку менти!',
+            status=status.HTTP_200_OK
+            )
+
 
 class GetStatementViewSet(APIView):
     permission_classes = [IsAuthenticated]

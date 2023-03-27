@@ -1,12 +1,10 @@
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
 from django.contrib.auth import get_user_model
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
 
 from .serializers import (
     UserRegistrationSerializer, 
@@ -35,18 +33,18 @@ class RegistrationView(APIView):
 
 
 class AccountActivationView(APIView):
-    def get(self, request, activation_code):
+    def post(self, request, activation_code):
         user = User.objects.filter(activation_code=activation_code).first()
         if not user:
             return Response(
-                'Страница не найдена...', 
+                'Пользователя с таким кодом не существует!', 
                 status=status.HTTP_404_NOT_FOUND
                 )
         user.is_active = True
         user.activation_code = ''
         user.save()
         return Response(
-            'Учетная запись активирована! Теперь Вы можете войти на ...', 
+            'Учетная запись активирована! Теперь Вы можете войти на MentorKG', 
             status=status.HTTP_200_OK
             )
 
@@ -75,17 +73,6 @@ class RestorePasswordView(APIView):
             )
 
 
-class NewEmailView(APIView):
-    def post(self, request: Request):
-        serializer = RestorePasswordSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.send_email_code()
-            return Response(
-                'Код для изменения почты был отправлен вам на почту.',
-                status=status.HTTP_200_OK
-            )
-
-
 class SetRestoredPasswordView(APIView):
     def post(self, request: Request):
         serializer = SetRestoredPasswordSerializer(data=request.data)
@@ -93,17 +80,6 @@ class SetRestoredPasswordView(APIView):
             serializer.set_new_password()
             return Response(
                 'Ваш пароль успешно восстановлен.',
-                status=status.HTTP_200_OK
-            )
-
-
-class SetNewEmailView(APIView):
-    def post(self, request: Request):
-        serializer = UpdateEmailSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.update()
-            return Response(
-                'Ваша почта успешно изменена.',
                 status=status.HTTP_200_OK
             )
 
@@ -122,7 +98,6 @@ class DeleteAccountView(APIView):
             )
 
 
-
 class UserPatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(request_body=UpdateUsernameImageSerializer)
@@ -135,3 +110,18 @@ class UserPatchUpdateView(APIView):
             answer = {"status": "UPDATE" }
             answer.update(serializer.data, status=status.HTTP_200_OK)
             return Response(answer)
+        
+
+class NewEmailView(APIView):
+    permission_classes = [IsAuthenticated]    
+
+    def post(self, request: Request):
+        email = request.user.email
+        serializer = UpdateEmailSerializer(data = request.data, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            user = User.objects.get(email=email)
+            serializer.update(instance=user, validated_data=serializer.validated_data)
+            return Response(
+                'Вы успешно сменили почту!',
+                status=status.HTTP_204_NO_CONTENT
+            )

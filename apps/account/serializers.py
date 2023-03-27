@@ -17,6 +17,7 @@ def email_validator(email):
             )
         return email
 
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(max_length=128, required=True)
 
@@ -183,54 +184,6 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
         instance.save()
 
 
-class UpdateEmailSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ['old_email', 'new_email', 'new_email_confirm', 'code']
-
-    old_email = serializers.EmailField(
-        required=True, 
-        max_length=255,
-        validators=[email_validator]
-        )
-    new_email = serializers.EmailField(
-        required=True, 
-        max_length=255,
-        )
-    new_email_confirm = serializers.EmailField(
-        required=True, 
-        max_length=255,
-        )
-    code = serializers.CharField(min_length=1, max_length=8, required=True)
- 
-
-    def validate_code(self, code):
-        if not User.objects.filter(activation_code=code).exists():
-            raise serializers.ValidationError(
-                'Wrong code'
-            )
-        return code
-    
-
-    def validate(self, attrs):
-        new_email = attrs.get('new_email')
-        new_email_confirm = attrs.get('new_email_confirm')
-        if new_email != new_email_confirm:
-            raise serializers.ValidationError(
-                'Email do not match'
-            )
-        return attrs
-
-
-    def update(self):
-        old_email = self.validated_data.get('old_email')
-        new_email = self.validated_data.get('new_email')
-        user_email = User.objects.get(email=old_email)
-        user_email.email = new_email
-        user_email.save()
-
-
 class AccountDeleteSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=255, required=True)
     password = serializers.CharField(max_length=128, required=True)
@@ -247,3 +200,21 @@ class AccountDeleteSerializer(serializers.Serializer):
                 'Wrong password'
             )
         return attrs
+
+
+class UpdateEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True, max_length=255)
+    password =serializers.CharField(max_length=128, required=True)
+
+    def validate(self, attrs):
+        user = self.context.get('request').user
+        if not user.check_password(attrs.get('password')):
+            raise serializers.ValidationError(
+                'Wrong password'
+            )
+        return attrs
+
+    def update(self, instance: User, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+        return instance

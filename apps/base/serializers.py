@@ -11,14 +11,14 @@ class PersonalProfileSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('last_login','password','id','is_active','is_staff','activation_code')
+        exclude = ('last_login','password', 'is_active','is_staff','activation_code')
 
 
 class PublicProfileSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('last_login','password','id','is_active','is_staff','activation_code','email','telegram','telegram_status','registration_date')
+        exclude = ('last_login','password', 'is_active','is_staff','activation_code','email','telegram','telegram_status','registration_date')
 
 
 class SpecializationSerializer(ModelSerializer):
@@ -31,4 +31,4 @@ class MentorSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('last_login','password','id','is_active','is_staff','activation_code','email','telegram','telegram_status','registration_date')
+        exclude = ('last_login','password', 'is_active','is_staff','activation_code','email','telegram','telegram_status','registration_date')

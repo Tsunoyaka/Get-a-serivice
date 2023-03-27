@@ -8,7 +8,6 @@ from .views import (
     SetRestoredPasswordView, 
     UserPatchUpdateView,
     NewEmailView,
-    SetNewEmailView,
     )
 
 from rest_framework_simplejwt.views import (
@@ -30,5 +29,4 @@ urlpatterns = [
     path('delete-account/', DeleteAccountView.as_view(), name='delete-account'),
     path('update-user/', UserPatchUpdateView.as_view()),
     path('update-email/', NewEmailView.as_view()),
-    path('set-new-email/', SetNewEmailView.as_view()),
 ]

@@ -5,16 +5,10 @@ from django.conf import settings
 
 
 def send_activation_code(email, activation_code):
-    activation_link = f'http://127.0.0.1:8000/account/activate/{activation_code}/'
-    html_message = render_to_string(
-        'account/code_mail.html', 
-        {'activation_link': activation_link}
-        )
     send_mail(
-        'Activate your account!',
-        '',
-        settings.EMAIL_HOST_USER,
-        [email],
-        html_message=html_message,
+        subject='Активируйте ваш аккаунт!',
+        message=f"Ваш активационный код: {activation_code}",
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email],
         fail_silently=False
     )
