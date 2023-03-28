@@ -5,12 +5,12 @@ from .views import PersonalProfileView, PublicProfileView, SpecializationViewSet
 
 router = DefaultRouter()
 router.register('specialization', SpecializationViewSet)
-router.register('mentors', ListOfMentorsView)
 
 
 urlpatterns = [
     path('public-profile/<int:pk>/', PublicProfileView.as_view(), name='retrieve'),
     path('personal-profile/', PersonalProfileView.as_view(), name='profile'),
+    path('mentors/', ListOfMentorsView.as_view())
 ]
 
 
