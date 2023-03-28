@@ -6,7 +6,7 @@ User = get_user_model()
 
 
 class Specialization(models.Model):
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, unique=True)
 
     def __str__(self) -> str:
         return self.title

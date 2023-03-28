@@ -49,7 +49,7 @@ class User(AbstractBaseUser):
         )
     skills = models.CharField(max_length=512)
     status = models.BooleanField(default=True)
-    price = models.CharField(max_length=10)
+    price = models.CharField(max_length=18)
     language = models.CharField(max_length=20)
     registration_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)

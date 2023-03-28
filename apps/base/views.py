@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListAPIView
+
 from .serializers import MentorSerializer, SpecializationSerializer
 from .models import Specialization
 
@@ -37,7 +39,7 @@ class SpecializationViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
 
 
-class ListOfMentorsView(ModelViewSet):
+class ListOfMentorsView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = MentorSerializer
 
