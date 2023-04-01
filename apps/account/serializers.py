@@ -148,7 +148,7 @@ class SetRestoredPasswordSerializer(serializers.Serializer):
 
 
 class UpdateUsernameImageSerializer(serializers.ModelSerializer):
-    specialization = serializers.ListField()
+    specialization = serializers.ListField(required=False)
 
     def validate(self, attrs):
         user = self.context['request'].user
@@ -171,9 +171,11 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
 
     def update(self, instance: User, validated_data):
         specializations = validated_data.get('specialization')
-        sp = []
-        for specialization in specializations:
-            sp.append(Specialization.objects.filter(title=specialization).first())
+        if specializations:
+            sp = []
+            for specialization in specializations:
+                sp.append(Specialization.objects.filter(title=specialization).first())
+            instance.specialization.set(sp)
         instance.username = validated_data.get('username', instance.username) 
         instance.image = validated_data.get('image', instance.image)
         instance.position = validated_data.get('position', instance.position)
@@ -187,8 +189,6 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
         instance.language = validated_data.get('language', instance.language)
         instance.telegram = validated_data.get('telegram', instance.telegram)
         instance.telegram_status = validated_data.get('telegram_status', instance.telegram_status)
-        if specialization:
-            instance.specialization.set(sp)
         instance.save()
 
 

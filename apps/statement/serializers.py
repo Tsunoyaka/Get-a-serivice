@@ -51,8 +51,7 @@ class UpdateStatementSerializer(serializers.ModelSerializer):
         return attrs
     
     def update(self, instance: Statement, validated_data):
-        send_response(email=instance.email, 
-                      mentor=instance.mentor_service.username, 
+        send_response(instance=instance,
                       response=validated_data.get('accepted'))
         instance.accepted = validated_data.get('accepted', instance.accepted)
         instance.denied = validated_data.get('denied', instance.denied)

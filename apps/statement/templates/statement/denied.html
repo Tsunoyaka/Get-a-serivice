@@ -22,7 +22,7 @@
     background-color: #bae8e8; 
     border-radius: 15px; 
     display: flex; 
-    height: 500px; 
+    height: 629px; 
     justify-content: center; 
     align-items: center; 
    } 
@@ -51,11 +51,63 @@
     row-gap: 45px; 
     align-items: center; 
    } 
+   .name-block { 
+    text-align: center; 
+   } 
+   .name-block > a { 
+    color: #272343; 
+    font-size: 25px; 
+    font-weight: 600; 
+    margin-bottom: 10px; 
+   } 
+   .name-block > h5 { 
+    font-size: 20px; 
+    color: #485174; 
+    font-weight: 600; 
+   } 
    .description { 
     font-size: 30px; 
     font-weight: 300; 
     line-height: 42px; 
     color: #2d334a; 
+   } 
+   .logo-block { 
+    display: none; 
+   } 
+   @media (max-width: 400px) { 
+    .body { 
+     height: auto; 
+    } 
+    main { 
+     width: 100%; 
+     padding: 26px 46px 12px 22px; 
+     border-radius: 15px; 
+    } 
+    .top-block { 
+     display: none; 
+    } 
+    .bottom-block { 
+     align-items: start; 
+    } 
+    .logo-block { 
+     display: block; 
+     text-align: end; 
+    } 
+    .logo { 
+     font-size: 14px; 
+    } 
+    .name-block { 
+     row-gap: 5px; 
+    } 
+    .name-block > a { 
+     font-size: 19px; 
+    } 
+    .name-block > h5 { 
+     font-size: 14px; 
+    } 
+    .description { 
+     font-size: 16px; 
+    } 
    } 
   </style> 
  </head> 
@@ -66,12 +118,19 @@
      <h3 class="logo">Mentor<span class="kg">KG</span></h3> 
     </div> 
     <div class="bottom-block"> 
+     <div class="name-block"> 
+        <a href="#">{{ Fullname }}</a> 
+        <h5>{{ DateTime }}</h5> 
+     </div> 
      <p class="description"> 
-      Вы успешно зарегистрировались, <br /> 
-      остался последний шаг, <br /> 
-      скопируйте и вставьте нужное поле <br /> 
-      на сайте этот код: {{ activation_code }} 
+      Ваша заявка была отклонена <br /> 
+      ментором. В этом нет вашей вины. <br /> 
+      Возможно, не было времени или <br /> 
+      необходимой экспертизы. 
      </p> 
+    </div> 
+    <div class="logo-block"> 
+     <h3 class="logo">Mentor<span class="kg">KG</span></h3> 
     </div> 
    </main> 
   </div> 

@@ -84,8 +84,7 @@ class StatementAcceptedView(APIView):
         statement.denied_code = ''
         statement.save()
         send_response(
-            email=statement.mentor_service.email, 
-            mentor=statement.mentor_service.username, 
+            instance=statement,
             response=True
             )
         return Response(
@@ -107,8 +106,7 @@ class StatementDeniedView(APIView):
         statement.denied_code = ''
         statement.save()
         send_response(
-            email=statement.mentor_service.email, 
-            mentor=statement.mentor_service.username, 
+            instance=statement,
             response=False
             )
         return Response(

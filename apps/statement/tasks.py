@@ -3,22 +3,39 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from .models import Statement
 
-def send_response(email: str, mentor: str, response: bool):
+
+def send_response(instance: Statement, response: bool):
+    email = instance.email
+    mentor = instance.mentor_service.username
+    datetime = instance.create_at
     if response is True:
+        html_message = render_to_string(
+            'statement/accepted.html', 
+            {'Fullname': mentor,
+             'DateTime': datetime,
+            })
         send_mail(
-            subject='Вашу заявку приняли!',
-            message=f'Вашу заявку принял ментор - {mentor}',
+            subject='MentorKG - Вашу заявку приняли!',
+            message='',
             from_email=settings.EMAIL_HOST_USER,
+            html_message=html_message,
             recipient_list=[email]
         )
     else:
+        html_message = render_to_string(
+            'statement/denied.html', 
+            {'Fullname': mentor,
+             'DateTime': datetime,
+            })
         send_mail(
-            subject='Вам было отказано',
-            message=f'Ваша заявка откланена ментором - {mentor}',
+            subject='MentorKG - Вашу заявку отклонили!',
+            message='',
             from_email=settings.EMAIL_HOST_USER,
+            html_message=html_message,
             recipient_list=[email]
-            ) 
+        )
     
+
 
 def send_respons_mentor(instance: Statement):
     email = instance.mentor_service.email
