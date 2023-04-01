@@ -159,14 +159,14 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ('id', 'email', 'last_login', 'is_active', 'is_staff', 
-                   'activation_code', 'status', 'password', 'registration_date')
+                   'activation_code', 'password', 'registration_date')
         
         extra_kwargs = {'username': {'required': False}, 'image': {'required': False}, 
                         'position': {'required': False}, 'place_of_work': {'required': False}, 
                         'about_me': {'required': False}, 'help': {'required': False}, 
                         'level_mentor': {'required': False}, 'experience': {'required': False},
                         'skills': {'required': False}, 'price': {'required': False}, 
-                        'language': {'required': False}}
+                        'language': {'required': False}, 'status': {'required': False}}
 
 
     def update(self, instance: User, validated_data):
@@ -189,6 +189,7 @@ class UpdateUsernameImageSerializer(serializers.ModelSerializer):
         instance.language = validated_data.get('language', instance.language)
         instance.telegram = validated_data.get('telegram', instance.telegram)
         instance.telegram_status = validated_data.get('telegram_status', instance.telegram_status)
+        instance.status = validated_data.get('status', instance.status)
         instance.save()
 
 
