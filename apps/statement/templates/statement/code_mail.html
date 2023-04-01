@@ -1,62 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <style>
-        h1 {
-            font-size: 1.5em;
-            color: greenyellow;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .message {
-            font-size: 1.2em;
-            color: #666;
-            margin: 0;
-        }
-        .link {
-            color: red;
-            padding: 14px 20px;
-            margin: 8px 0;
-            /* border: ; */
-            cursor: pointer;
-
-            /* width: 100%; */
-        }
-        #accepted {
-            background-color: #4CAF50;
-            
-        }
-        #denied {
-            background-color: #da1414;
-        }
-        div{
-            display: flex;
-            justify-content: center;
-        }
-    </style>
-</head>
-<body>
-    <div>
-        <h1>MentorKG!</h1>
-    </div>  
-    <div>
-        Имя<br>{{ name }}<br><br>
-        Email<br>{{ email }}<br><br>
-        Telegram<br>@{{ telegram }}<br><br>
-        О чём хотите поговорить?<br>{{ description }}<br><br>
-        Как вы оцениваете свой уровень? <br>{{ my_level }}
-    </div>
-    <div>
-        <a href="{{ accepted_link }}" id="accepted" class="link"><button type="submit">Accepted</button></a>
-    </div>
-    <div>
-        <a href="{{ denied_link }}" id="denied" class="link"><button type="submit">Denied</button></a>
-    </div>
-</body>
+<!DOCTYPE html> 
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <link rel="preconnect" href="https://fonts.googleapis.com" /> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> 
+  <link 
+   href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" 
+   rel="stylesheet" 
+  /> 
+  <title></title> 
+  <style> 
+   * { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Poppins', sans-serif; 
+   } 
+   body { 
+    width: 80%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    margin: auto; 
+   } 
+   .logo-block { 
+    width: 100%; 
+    margin-bottom: 27px; 
+    text-align: left; 
+   } 
+   .logo { 
+    font-size: 30px; 
+    font-weight: 600; 
+    color: #272343; 
+   } 
+   .kg { 
+    color: #ffd803; 
+   } 
+   .name-block { 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    row-gap: 10px; 
+    margin-bottom: 20px; 
+   } 
+   .name { 
+    color: #272343; 
+    font-size: 25px; 
+    font-weight: 600; 
+   } 
+   .email { 
+    color: #086cb7; 
+    font-size: 20px; 
+    font-weight: 400; 
+   } 
+   .telegram { 
+    color: #485174; 
+    font-size: 20px; 
+    font-weight: 400; 
+   } 
+   .description { 
+    padding: 39px 58px; 
+    border-radius: 10px; 
+    background-color: #e3f6f599; 
+    margin-bottom: 30px; 
+   } 
+   .level-block { 
+    display: flex; 
+    column-gap: 40px; 
+    justify-content: center; 
+    align-items: center; 
+    margin-bottom: 60px; 
+   } 
+   .my-level { 
+    padding: 14px 45px; 
+    background-color: #bae8e8; 
+    border-radius: 50px; 
+   } 
+   .btn-block { 
+    display: flex; 
+    justify-content: center; 
+    column-gap: 45px; 
+   } 
+   .accept-btn { 
+    text-decoration: none; 
+    background-color: #ffd803; 
+    border-radius: 18px; 
+    padding: 26px 48px; 
+    color: #485174; 
+   } 
+   .denied-btn { 
+    text-decoration: none; 
+    background-color: #485174; 
+    border-radius: 18px; 
+    padding: 26px 48px; 
+    color: antiquewhite; 
+   } 
+   .logo-block2 { 
+    display: none; 
+   } 
+   @media (max-width: 400px) { 
+    body { 
+     width: 100%; 
+     padding: 40px 0 15px 0; 
+    } 
+    .logo-block { 
+     display: none; 
+    } 
+    .btn-block { 
+     flex-direction: column; 
+     align-items: center; 
+     row-gap: 16px; 
+     margin-bottom: 32px; 
+    } 
+    .btn-block > a { 
+     padding: 17px 39px; 
+     border-radius: 6px; 
+    } 
+    .logo-block2 { 
+     display: block; 
+    } 
+    .logo-block2 > h3 { 
+     font-size: 12px; 
+    } 
+    .my-level-label { 
+     font-size: 14px; 
+    } 
+    .name { 
+     font-size: 20px; 
+    } 
+    .description, 
+    .email, 
+    .telegram, 
+    .my-level { 
+     font-size: 16px; 
+    } 
+   } 
+  </style> 
+ </head> 
+ <body> 
+  <div class="logo-block"> 
+   <h3 class="logo">Mentor<span class="kg">KG</span></h3> 
+  </div> 
+  <div class=""> 
+   <div class="name-block"> 
+    <h3 class="name">{{ name }}</h3> 
+    <h4 class="email">{{ email }}</h4> 
+    <h4 class="telegram">Telegram {{ telegram }}</h4> 
+   </div> 
+   <p class="description">{{ description }}</p> 
+   <div class="level-block"> 
+    <p class="my-level-label">Мой уровень</p> 
+    <p class="my-level">{{ my_level }}</p> 
+   </div> 
+   <div class="btn-block"> 
+    <a href="{{ accepted_link }}" class="accept-btn">Принять заявку</a> 
+    <a href="{{ denied_link }}" class="denied-btn">Отказать</a> 
+   </div> 
+  </div> 
+  <div class="logo-block2"> 
+   <h3 class="logo">Mentor<span class="kg">KG</span></h3> 
+  </div> 
+ </body> 
 </html>
-

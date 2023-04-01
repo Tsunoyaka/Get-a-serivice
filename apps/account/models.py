@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.utils.crypto import get_random_string
 from django.core.exceptions import ValidationError
-from datetime import datetime
+
 
 class UserManager(BaseUserManager):
     def _create(self, username, email, password, **extra_fields):
@@ -73,6 +73,10 @@ class User(AbstractBaseUser):
     def save(self,*args, **kwargs):
         if not self.username:
             raise ValidationError('Поле имени не может быть пустым!')
+        # if self.image:
+        #     TWO_MB = 2000000
+        #     if self.image.size > TWO_MB:
+        #         raise ValidationError('Размер файла не может превышать 2мб!')
         super().save(*args, **kwargs)
 
     def create_activation_code(self):
